@@ -1,0 +1,136 @@
+:root {
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+  color: #12263a;
+  background: radial-gradient(circle at top left, #f2f8ff 0%, #f7f9fc 45%, #ffffff 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 24px;
+  border-bottom: 1px solid #d6e0ea;
+  background: #ffffffcc;
+  position: sticky;
+  top: 0;
+}
+
+.brand {
+  color: #17324d;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.centered {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+}
+
+.card,
+.panel {
+  border: 1px solid #d6e0ea;
+  border-radius: 12px;
+  padding: 16px;
+  background: #ffffff;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stack-sm {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+input,
+textarea,
+select,
+button {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #bfd0e0;
+  border-radius: 8px;
+  font: inherit;
+}
+
+button {
+  background: #13365a;
+  color: #fff;
+  cursor: pointer;
+}
+
+button.secondary {
+  width: auto;
+  background: #eff4fa;
+  color: #17324d;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.list {
+  margin: 0;
+  padding-left: 18px;
+}
+
+.error {
+  color: #9d1c1c;
+  background: #fdecec;
+  border: 1px solid #efc2c2;
+  border-radius: 8px;
+  padding: 8px;
+}
+
+.note {
+  margin-top: 0;
+  padding: 8px 10px;
+  border-left: 3px solid #2f668f;
+  background: #eef6ff;
+}
+
+.ok {
+  color: #1c6248;
+}
+
+.muted {
+  color: #5d7085;
+}
