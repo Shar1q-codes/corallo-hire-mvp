@@ -18,6 +18,47 @@ class ArtifactRepository:
         return list(result.scalars().all())
 
     @staticmethod
+    async def get_latest_by_type(
+        session: AsyncSession,
+        *,
+        tenant_id: UUID,
+        evaluation_id: UUID,
+        artifact_type: str,
+    ) -> Artifact | None:
+        result = await session.execute(
+            select(Artifact)
+            .where(
+                Artifact.tenant_id == tenant_id,
+                Artifact.evaluation_id == evaluation_id,
+                Artifact.artifact_type == artifact_type,
+            )
+            .order_by(Artifact.created_at.desc())
+        )
+        return result.scalar_one_or_none()
+
+    @staticmethod
+    async def get_available_types(
+        session: AsyncSession,
+        *,
+        tenant_id: UUID,
+        evaluation_id: UUID,
+    ) -> set[str]:
+        result = await session.execute(
+            select(Artifact.artifact_type).where(
+                Artifact.tenant_id == tenant_id,
+                Artifact.evaluation_id == evaluation_id,
+                Artifact.artifact_type.in_(
+                    [
+                        ArtifactType.INTENT_HYPOTHESES.value,
+                        ArtifactType.RISK_SIGNALS.value,
+                        ArtifactType.INTERVIEW_GUIDANCE.value,
+                    ]
+                ),
+            )
+        )
+        return set(result.scalars().all())
+
+    @staticmethod
     async def create(
         session: AsyncSession,
         *,

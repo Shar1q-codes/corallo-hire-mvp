@@ -5,7 +5,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.db import apply_rls_context, get_db_session
 from app.core.security import RequestContext, get_request_context
+from app.repositories.artifact_views import ArtifactViewRepository
 from app.repositories.artifacts import ArtifactRepository
+from app.services.artifact_gates import gate_reason
 from app.schemas.artifact import ArtifactOut
 
 router = APIRouter()
@@ -21,5 +23,15 @@ async def list_artifacts(
     artifacts = await ArtifactRepository.list_by_evaluation(
         session, tenant_id=context.tenant_id, evaluation_id=evaluation_id
     )
-    return [ArtifactOut.model_validate(item) for item in artifacts]
-
+    viewed_map = await ArtifactViewRepository.get_latest_view_map(
+        session,
+        tenant_id=context.tenant_id,
+        user_id=context.user_id,
+        evaluation_id=evaluation_id,
+    )
+    gated = [
+        item
+        for item in artifacts
+        if gate_reason(artifact_type=item.artifact_type, viewed=viewed_map) is None
+    ]
+    return [ArtifactOut.model_validate(item) for item in gated]
