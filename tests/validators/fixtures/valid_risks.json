@@ -1,0 +1,30 @@
+{
+  "risks": [
+    {
+      "risk_statement": "Ambiguous ownership boundaries -> delayed incident mitigation during cross-team outages.",
+      "mechanism": "Unclear accountability can fragment escalation paths and slow urgent decision coordination.",
+      "evidence": [
+        "Prior environments relied on informal handoffs instead of explicit escalation ownership."
+      ],
+      "counter_signals": [
+        "Candidate describes successful use of rotating incident command responsibilities."
+      ],
+      "validation_suggestion": "Ask for a recent outage timeline and identify exact ownership transfer points.",
+      "confidence": "Medium",
+      "confidence_rationale": "Signal appears plausible but depends on team process maturity details."
+    },
+    {
+      "risk_statement": "Narrow domain transfer -> slower onboarding when system context shifts quickly.",
+      "mechanism": "Specialized experience may not map directly to unfamiliar architecture boundaries at startup speed.",
+      "evidence": [
+        "Recent projects cluster around one platform with consistent service boundaries."
+      ],
+      "counter_signals": [
+        "Candidate previously transitioned across two stacks within one quarter."
+      ],
+      "validation_suggestion": "Probe for a transition example requiring fast comprehension of unknown subsystems.",
+      "confidence": "Low",
+      "confidence_rationale": "Resume hints at both specialization and adaptation, so uncertainty remains high."
+    }
+  ]
+}

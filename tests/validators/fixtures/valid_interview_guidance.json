@@ -1,0 +1,43 @@
+{
+  "focus_areas": [
+    {
+      "objective_statement": "Clarify how the candidate decomposes ambiguous distributed systems failures.",
+      "linked_signals": [
+        "Prior role described ownership of multi-service incident analysis workflows."
+      ],
+      "why_it_matters": "The target role requires fast diagnosis under uncertainty across service boundaries.",
+      "signals_increasing_confidence": [
+        "Provides a stepwise debugging framework with explicit hypothesis updates."
+      ],
+      "signals_decreasing_confidence": [
+        "Relies on ad hoc troubleshooting without reproducible diagnostic checkpoints."
+      ]
+    },
+    {
+      "objective_statement": "Understand communication behavior during cross-functional execution conflicts.",
+      "linked_signals": [
+        "Resume references collaboration with product and operations on release decisions."
+      ],
+      "why_it_matters": "Team delivery depends on predictable communication during changing requirements.",
+      "signals_increasing_confidence": [
+        "Explains concrete methods for resolving priority tension while preserving relationships."
+      ],
+      "signals_decreasing_confidence": [
+        "Describes conflict handling in abstract terms without concrete examples."
+      ]
+    },
+    {
+      "objective_statement": "Evaluate adaptation speed when entering unfamiliar platform domains.",
+      "linked_signals": [
+        "History includes transitions between services with different reliability constraints."
+      ],
+      "why_it_matters": "The role frequently moves between product domains with limited onboarding runway.",
+      "signals_increasing_confidence": [
+        "Shares a timeline showing rapid domain understanding and measurable delivery outcomes."
+      ],
+      "signals_decreasing_confidence": [
+        "Cannot explain how unfamiliar domain risks were identified and managed."
+      ]
+    }
+  ]
+}

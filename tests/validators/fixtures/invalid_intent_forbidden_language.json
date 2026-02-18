@@ -1,0 +1,38 @@
+{
+  "hypotheses": [
+    {
+      "hypothesis_statement": "The best path is obvious because this profile is a strong fit for the role.",
+      "evidence": [
+        "Several project examples include relevant infrastructure ownership and incident response."
+      ],
+      "counter_signals": [
+        "The role may require heavier stakeholder alignment than shown in project summaries."
+      ],
+      "open_questions": [
+        "How does the candidate adapt communication style across non-technical stakeholders?"
+      ],
+      "validation_targets": [
+        "Ask for an example of resolving roadmap conflict with product and operations peers."
+      ],
+      "confidence": "Medium",
+      "confidence_rationale": "Relevant examples are present but project context remains partially inferred."
+    },
+    {
+      "hypothesis_statement": "The candidate may prefer operationally mature environments over rapid prototypes.",
+      "evidence": [
+        "Prior work focuses on reliability workstreams with monitoring and runbook discipline."
+      ],
+      "counter_signals": [
+        "The profile includes one startup period with frequent delivery changes."
+      ],
+      "open_questions": [
+        "What conditions make early-stage ambiguity productive for this candidate?"
+      ],
+      "validation_targets": [
+        "Prompt for a case where priorities shifted and reliability still improved."
+      ],
+      "confidence": "Low",
+      "confidence_rationale": "Signals are directional but should be tested through direct discussion."
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "risks": [
+    {
+      "risk_statement": "Ambiguous release controls -> production instability during high-frequency deployments.",
+      "mechanism": "Overall assessment: insufficient release gating can propagate defects before rollback signals emerge.",
+      "evidence": [
+        "Release notes show multiple emergency fixes after tightly packed deploy windows."
+      ],
+      "counter_signals": [
+        "The team introduced feature flags that reduced impact in later periods."
+      ],
+      "validation_suggestion": "Ask which release checks were mandatory before each deployment group.",
+      "confidence": "Medium",
+      "confidence_rationale": "Data indicates instability, though process improvements may have changed baseline risk."
+    },
+    {
+      "risk_statement": "Weak escalation rehearsal -> slower recovery under concurrent incident load.",
+      "mechanism": "Rare practice of multi-incident drills can reduce coordination quality under pressure.",
+      "evidence": [
+        "Postmortem notes mention confusion around communication ownership during overlap."
+      ],
+      "counter_signals": [
+        "New playbooks have been drafted with clearer routing expectations."
+      ],
+      "validation_suggestion": "Request an incident narrative showing how communication ownership was assigned.",
+      "confidence": "Low",
+      "confidence_rationale": "Observed examples are limited and may not represent current process quality."
+    }
+  ]
+}
