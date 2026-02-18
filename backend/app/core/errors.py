@@ -6,6 +6,8 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+from app.orchestrator.types import OrchestratorError
+
 
 class ApiProblem(Exception):
     def __init__(
@@ -22,6 +24,29 @@ class ApiProblem(Exception):
         self.type = type_
         self.errors = errors or []
         super().__init__(detail)
+
+
+def api_problem_from_orchestrator_error(error: OrchestratorError) -> ApiProblem:
+    if error.code == "provider_error":
+        return ApiProblem(
+            status=503,
+            title="Analysis temporarily unavailable",
+            detail="External model provider is unavailable. Try again later.",
+            type_="https://errors.hdis/circuit-breaker-open",
+        )
+    if error.code == "evaluation_not_found":
+        return ApiProblem(
+            status=404,
+            title="Not Found",
+            detail="Evaluation not found.",
+            type_="https://hdis.dev/problems/not-found",
+        )
+    return ApiProblem(
+        status=error.http_status,
+        title="Orchestrator Error",
+        detail=error.message,
+        type_="https://errors.hdis/orchestrator",
+    )
 
 
 def _problem_payload(
@@ -87,4 +112,3 @@ def install_error_handlers(app: FastAPI) -> None:
                 type_="https://hdis.dev/problems/internal-server-error",
             ),
         )
-

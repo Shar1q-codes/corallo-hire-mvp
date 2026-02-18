@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from app.routers.artifacts import router as artifacts_router
 from app.routers.evaluations import router as evaluations_router
+from app.routers.evaluations_run import router as evaluations_run_router
 from app.routers.health import router as health_router
 from app.routers.jobs import router as jobs_router
 from app.routers.resumes import router as resumes_router
@@ -15,6 +16,6 @@ def api_router() -> APIRouter:
     router.include_router(jobs_router, tags=["jobs"])
     router.include_router(resumes_router, tags=["resumes"])
     router.include_router(evaluations_router, tags=["evaluations"])
+    router.include_router(evaluations_run_router, tags=["evaluations"])
     router.include_router(artifacts_router, tags=["artifacts"])
     return router
-
