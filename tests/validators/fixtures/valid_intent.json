@@ -1,0 +1,38 @@
+{
+  "hypotheses": [
+    {
+      "hypothesis_statement": "The candidate may prefer autonomy when clarifying ambiguous technical requirements.",
+      "evidence": [
+        "Resume examples mention independent ownership of undefined integration tasks."
+      ],
+      "counter_signals": [
+        "The profile also shows successful collaboration inside structured team programs."
+      ],
+      "open_questions": [
+        "How does the candidate align autonomy with shared planning milestones?"
+      ],
+      "validation_targets": [
+        "Ask for a concrete example balancing independent execution and peer review."
+      ],
+      "confidence": "Medium",
+      "confidence_rationale": "Evidence supports the pattern but context from interviews is still limited."
+    },
+    {
+      "hypothesis_statement": "The candidate may respond well to roles with explicit customer feedback loops.",
+      "evidence": [
+        "Project history includes repeated improvements based on user support conversations."
+      ],
+      "counter_signals": [
+        "Some initiatives emphasize backend throughput with limited direct customer dialogue."
+      ],
+      "open_questions": [
+        "What level of customer interaction is energizing versus distracting for the candidate?"
+      ],
+      "validation_targets": [
+        "Request a story where user feedback changed a technical implementation plan."
+      ],
+      "confidence": "Low",
+      "confidence_rationale": "The signal appears but supporting detail is uneven across recent projects."
+    }
+  ]
+}

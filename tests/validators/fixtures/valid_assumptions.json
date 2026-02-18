@@ -1,0 +1,30 @@
+{
+  "assumptions": [
+    {
+      "assumption_statement": "Job description expects frequent architecture tradeoff communication.",
+      "assumption_type": "JD",
+      "supporting_evidence": [
+        "Role requirements emphasize communication with product and infrastructure teams."
+      ],
+      "counter_signals": [
+        "Day-to-day tasks may still be mostly implementation focused in this team."
+      ],
+      "validation_target": "Confirm expected communication cadence across stakeholder groups.",
+      "confidence": "Medium",
+      "confidence_rationale": "Posting language supports this, but real team routines may differ."
+    },
+    {
+      "assumption_statement": "Recruiter notes imply high ownership comfort under unclear scope.",
+      "assumption_type": "Recruiter",
+      "supporting_evidence": [
+        "Recruiter highlighted independent leadership in previous undefined projects."
+      ],
+      "counter_signals": [
+        "Notes may emphasize positives and omit constraint-heavy contexts."
+      ],
+      "validation_target": "Ask for an example where scope uncertainty required explicit boundary setting.",
+      "confidence": "Low",
+      "confidence_rationale": "Signal originates from secondary narrative and needs direct confirmation."
+    }
+  ]
+}
