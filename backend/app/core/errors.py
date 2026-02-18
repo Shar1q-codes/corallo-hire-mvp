@@ -6,6 +6,9 @@ from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 
+from app.core.db import is_rls_denied_error
+from app.core.telemetry import get_logger
+from app.metrics.registry import metrics_registry
 from app.orchestrator.types import OrchestratorError
 
 
@@ -24,6 +27,9 @@ class ApiProblem(Exception):
         self.type = type_
         self.errors = errors or []
         super().__init__(detail)
+
+
+logger = get_logger(__name__)
 
 
 def api_problem_from_orchestrator_error(error: OrchestratorError) -> ApiProblem:
@@ -101,7 +107,20 @@ def install_error_handlers(app: FastAPI) -> None:
         )
 
     @app.exception_handler(Exception)
-    async def unhandled_exception_handler(request: Request, _: Exception) -> JSONResponse:
+    async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+        if is_rls_denied_error(exc):
+            metrics_registry.inc("rls_denied_total")
+            logger.warning("RLS denied error detected")
+            return JSONResponse(
+                status_code=403,
+                content=_problem_payload(
+                    request,
+                    status=403,
+                    title="Forbidden",
+                    detail="Access denied.",
+                    type_="https://hdis.dev/problems/forbidden",
+                ),
+            )
         return JSONResponse(
             status_code=500,
             content=_problem_payload(

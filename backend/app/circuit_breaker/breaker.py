@@ -4,6 +4,8 @@ import enum
 import threading
 import time
 
+from app.metrics.registry import metrics_registry
+
 
 class BreakerState(str, enum.Enum):
     CLOSED = "closed"
@@ -64,6 +66,7 @@ class CircuitBreaker:
                 self._state = BreakerState.OPEN
                 self._opened_at = now_ts
                 self._half_open_inflight = False
+                metrics_registry.inc("circuit_breaker_open_total")
                 return
             self._events.append(now_ts)
             self._prune(now_ts)
@@ -71,4 +74,4 @@ class CircuitBreaker:
                 self._state = BreakerState.OPEN
                 self._opened_at = now_ts
                 self._half_open_inflight = False
-
+                metrics_registry.inc("circuit_breaker_open_total")

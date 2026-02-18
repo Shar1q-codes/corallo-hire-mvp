@@ -1,0 +1,22 @@
+{
+  "risks": [
+    {
+      "risk_statement": "Escalation ambiguity -> delayed operational response under outage pressure.",
+      "mechanism": "Score: 92% probability this risk appears during cross-team incident response.",
+      "evidence": ["Prior project notes mention coordination delays during concurrent on-call events."],
+      "counter_signals": ["Recent role includes improved incident ownership practices and drill routines."],
+      "validation_suggestion": "Ask for a concrete outage example with escalation timing and ownership transfer.",
+      "confidence": "Medium",
+      "confidence_rationale": "Available evidence is mixed and requires direct narrative validation."
+    },
+    {
+      "risk_statement": "Domain transition lag -> slower delivery in unfamiliar subsystem boundaries.",
+      "mechanism": "Specialized context can reduce initial throughput before architecture constraints are internalized.",
+      "evidence": ["Recent work history shows concentration in one domain with limited external movement."],
+      "counter_signals": ["Candidate previously migrated across teams and adapted within one quarter."],
+      "validation_suggestion": "Probe for a transition case requiring rapid context acquisition and execution.",
+      "confidence": "Low",
+      "confidence_rationale": "Signals are incomplete and may not reflect current adaptation behavior."
+    }
+  ]
+}

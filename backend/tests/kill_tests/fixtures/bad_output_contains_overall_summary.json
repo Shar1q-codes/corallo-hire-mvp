@@ -1,0 +1,26 @@
+{
+  "focus_areas": [
+    {
+      "objective_statement": "Clarify how the candidate decomposes complex production incidents with uncertainty.",
+      "linked_signals": ["Prior roles include ownership of multi-service debugging and resilience improvements."],
+      "why_it_matters": "The target environment requires rapid diagnosis across interconnected service boundaries.",
+      "signals_increasing_confidence": ["Provides a repeatable diagnostic sequence with explicit hypothesis updates."],
+      "signals_decreasing_confidence": ["Relies on intuition without concrete debugging checkpoints and evidence."],
+      "summary": "Overall this candidate should proceed."
+    },
+    {
+      "objective_statement": "Assess communication behavior during changing requirements and cross-team dependencies.",
+      "linked_signals": ["Experience includes collaboration with product and operations teams during releases."],
+      "why_it_matters": "Delivery quality depends on communication under evolving constraints and priorities.",
+      "signals_increasing_confidence": ["Gives concrete examples of resolving coordination conflicts constructively."],
+      "signals_decreasing_confidence": ["Cannot provide specific examples of dependency risk communication."]
+    },
+    {
+      "objective_statement": "Understand adaptation speed in unfamiliar domain constraints and architecture choices.",
+      "linked_signals": ["The profile indicates transitions between systems with different reliability priorities."],
+      "why_it_matters": "The role requires frequent context switching without extended onboarding windows.",
+      "signals_increasing_confidence": ["Describes concrete timelines for ramp-up and measurable outcome delivery."],
+      "signals_decreasing_confidence": ["Provides only abstract statements without traceable example outcomes."]
+    }
+  ]
+}

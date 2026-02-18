@@ -1,0 +1,22 @@
+{
+  "hypotheses": [
+    {
+      "hypothesis_statement": "We should hire immediately due to obvious alignment and certainty.",
+      "evidence": ["Resume contains relevant architecture ownership for distributed systems."],
+      "counter_signals": ["Candidate has less recent exposure to the current stack conventions."],
+      "open_questions": ["How does the candidate resolve ambiguity under high operational pressure?"],
+      "validation_targets": ["Ask for an incident example with clear tradeoff and communication detail."],
+      "confidence": "Medium",
+      "confidence_rationale": "Signals are mixed and still require direct validation."
+    },
+    {
+      "hypothesis_statement": "The candidate may prefer reliability-first engineering in service design work.",
+      "evidence": ["Past projects emphasize observability and operational resilience practices."],
+      "counter_signals": ["Limited detail exists on rapid prototype iteration under uncertainty."],
+      "open_questions": ["How does the candidate prioritize speed versus reliability in early development?"],
+      "validation_targets": ["Request a scenario where reliability boundaries changed during delivery."],
+      "confidence": "Low",
+      "confidence_rationale": "Evidence is directional but incomplete across recent contexts."
+    }
+  ]
+}

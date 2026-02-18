@@ -32,3 +32,19 @@ FastAPI backend skeleton for HDIS MVP with strict tenant-aware request handling 
 ## Notes
 - Database-level RLS remains authoritative for tenant isolation.
 - Backend also applies tenant scoping in all repositories as defense-in-depth.
+
+## Release Gates
+Run must-pass contract and drift gates before release:
+
+```bash
+python backend/scripts/run_release_gates.py
+```
+
+This runs:
+- `tests/validators`
+- `backend/tests/kill_tests`
+- optional live drift guard when `LIVE_TESTS=true`
+
+## Metrics
+- `/metrics` is disabled unless `METRICS_ENABLED=true`.
+- If `METRICS_ADMIN_SECRET` is set, requests must include `X-Admin-Metrics-Secret`.
