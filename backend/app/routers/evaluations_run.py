@@ -8,6 +8,8 @@ from app.core.config import get_settings
 from app.core.db import apply_rls_context, get_db_session
 from app.core.errors import ApiProblem, api_problem_from_orchestrator_error
 from app.core.security import RequestContext, get_request_context
+from app.core.telemetry import get_logger, set_request_context
+from app.metrics.registry import metrics_registry
 from app.orchestrator.run import run_evaluation
 from app.orchestrator.types import OrchestratorError
 from app.rate_limit.in_memory import InMemoryTokenBucket
@@ -15,6 +17,7 @@ from app.rate_limit.keys import tenant_run_key
 
 router = APIRouter()
 settings = get_settings()
+logger = get_logger(__name__)
 
 rate_limiter = InMemoryTokenBucket(
     capacity=settings.run_rate_limit_per_minute,
@@ -34,8 +37,11 @@ async def run_evaluation_endpoint(
     context: RequestContext = Depends(get_request_context),
 ) -> dict:
     await apply_rls_context(session, context)
+    set_request_context(evaluation_id=str(evaluation_id))
 
     if not rate_limiter.allow(tenant_run_key(context.tenant_id)):
+        metrics_registry.inc("rate_limited_total")
+        logger.warning("Rate limit exceeded for evaluation run")
         raise ApiProblem(
             status=429,
             title="Rate limit exceeded",
@@ -44,6 +50,7 @@ async def run_evaluation_endpoint(
         )
 
     if not circuit_breaker.allow_request():
+        logger.warning("Circuit breaker open on evaluation run")
         raise ApiProblem(
             status=503,
             title="Analysis temporarily unavailable",
@@ -60,5 +67,5 @@ async def run_evaluation_endpoint(
             circuit_breaker=circuit_breaker,
         )
     except OrchestratorError as exc:
+        logger.error("Orchestrator error", extra={"extra_json": {"error_code": exc.code}})
         raise api_problem_from_orchestrator_error(exc) from exc
-

@@ -6,6 +6,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.db import apply_rls_context, get_db_session
 from app.core.errors import ApiProblem
 from app.core.security import RequestContext, get_request_context
+from app.core.telemetry import get_logger
+from app.metrics.registry import metrics_registry
 from app.repositories.artifact_views import ArtifactViewRepository
 from app.repositories.artifacts import ArtifactRepository
 from app.repositories.audit import AuditRepository
@@ -15,6 +17,7 @@ from app.services.artifact_gates import gate_reason
 from app.validators.types import ArtifactType
 
 router = APIRouter()
+logger = get_logger(__name__)
 _ALLOWED_TYPES = {
     ArtifactType.INTENT_HYPOTHESES.value,
     ArtifactType.RISK_SIGNALS.value,
@@ -148,6 +151,8 @@ async def get_artifact_by_type(
     )
     reason = gate_reason(artifact_type=artifact_type, viewed=viewed_map)
     if reason is not None:
+        metrics_registry.inc("artifact_gate_blocked_total")
+        logger.warning("Artifact gate blocked", extra={"extra_json": {"artifact_type": artifact_type}})
         await AuditRepository.create(
             session,
             tenant_id=context.tenant_id,

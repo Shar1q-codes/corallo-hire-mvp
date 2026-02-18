@@ -2,13 +2,16 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import time
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.circuit_breaker.breaker import CircuitBreaker
+from app.core.telemetry import get_logger, set_request_context
 from app.llm.client import LLMClient, get_llm_client
 from app.llm.models import ProviderError
+from app.metrics.registry import metrics_registry
 from app.orchestrator.types import OrchestratorError, RoleRunResult
 from app.repositories.artifacts import ArtifactRepository
 from app.repositories.audit import AuditRepository
@@ -26,6 +29,7 @@ _PROMPT_FILES: dict[RoleType, str] = {
     RoleType.ASSUMPTION: "assumption_system.txt",
     RoleType.INTERVIEW: "interview_system.txt",
 }
+logger = get_logger(__name__)
 
 
 def _prompt_text(role: RoleType) -> str:
@@ -154,8 +158,10 @@ async def run_evaluation(
     validation_pipeline: ValidationPipeline | None = None,
     circuit_breaker: CircuitBreaker | None = None,
 ) -> dict:
+    evaluation_start = time.perf_counter()
     llm = llm_client or get_llm_client()
     pipeline = validation_pipeline or ValidationPipeline()
+    set_request_context(evaluation_id=str(evaluation_id))
 
     context = await EvaluationRepository.get_context(session, tenant_id=tenant_id, evaluation_id=evaluation_id)
     if context is None:
@@ -178,10 +184,13 @@ async def run_evaluation(
     intent_output: dict | None = None
     risk_output: dict | None = None
     assumption_output: dict | None = None
+    metrics_registry.inc("evaluations_started_total")
 
     for role in _ROLE_ORDER:
         role_result: RoleRunResult | None = None
+        role_start = time.perf_counter()
         for attempt in (1, 2):
+            metrics_registry.inc("role_attempts_total", labels={"role": role.value, "attempt": str(attempt)})
             repair_instruction: str | None = None
             if role_result and role_result.failure:
                 repair_instruction = build_repair_instruction(role_result.failure)
@@ -203,10 +212,28 @@ async def run_evaluation(
             except ProviderError as exc:
                 if circuit_breaker is not None:
                     circuit_breaker.record_provider_error()
+                metrics_registry.inc("provider_errors_total")
+                logger.error("Provider error during role run", extra={"extra_json": {"role": role.value}})
                 raise OrchestratorError("provider_error", str(exc), http_status=503) from exc
 
             validation = pipeline.validate(role, raw_text)
             if isinstance(validation, ValidationFailure):
+                metrics_registry.inc(
+                    "validator_failures_total",
+                    labels={"role": role.value, "code": validation.code.value},
+                )
+                logger.warning(
+                    "Validator failure",
+                    extra={
+                        "extra_json": {
+                            "role": role.value,
+                            "failure_code": validation.code.value,
+                            "paths": validation.paths,
+                            "matches": validation.matches,
+                            "raw_excerpt": validation.raw_excerpt[:200],
+                        }
+                    },
+                )
                 role_result = RoleRunResult(role=role, attempts=attempt, payload=None, failure=validation)
                 if attempt == 2:
                     await EvaluationRepository.mark_failed(
@@ -226,6 +253,9 @@ async def run_evaluation(
                     )
                     if circuit_breaker is not None:
                         circuit_breaker.record_success()
+                    metrics_registry.observe("role_latency_seconds", time.perf_counter() - role_start, labels={"role": role.value})
+                    metrics_registry.inc("evaluations_failed_total")
+                    metrics_registry.observe("evaluation_total_latency_seconds", time.perf_counter() - evaluation_start)
                     return {
                         "evaluation_id": str(evaluation_id),
                         "status": "failed",
@@ -256,6 +286,7 @@ async def run_evaluation(
                 risk_output = validation
             elif role == RoleType.ASSUMPTION:
                 assumption_output = validation
+            metrics_registry.observe("role_latency_seconds", time.perf_counter() - role_start, labels={"role": role.value})
             break
 
     await EvaluationRepository.mark_completed(session, tenant_id=tenant_id, evaluation_id=evaluation_id)
@@ -270,4 +301,6 @@ async def run_evaluation(
     )
     if circuit_breaker is not None:
         circuit_breaker.record_success()
+    metrics_registry.inc("evaluations_completed_total")
+    metrics_registry.observe("evaluation_total_latency_seconds", time.perf_counter() - evaluation_start)
     return {"evaluation_id": str(evaluation_id), "status": "completed", "failure_reason_code": None}

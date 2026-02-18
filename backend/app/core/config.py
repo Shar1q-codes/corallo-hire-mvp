@@ -36,6 +36,8 @@ class Settings(BaseSettings):
     breaker_cooldown_seconds: int = Field(default=120, alias="BREAKER_COOLDOWN_SECONDS")
 
     run_rate_limit_per_minute: int = Field(default=30, alias="RUN_RATE_LIMIT_PER_MINUTE")
+    metrics_enabled: bool = Field(default=False, alias="METRICS_ENABLED")
+    metrics_admin_secret: str = Field(default="", alias="METRICS_ADMIN_SECRET")
 
     @property
     def cors_origins(self) -> list[str]:
