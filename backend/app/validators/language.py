@@ -86,7 +86,7 @@ def _validate_risk_naming(payload: dict) -> ValidationFailure | None:
         statement = risk.get("risk_statement")
         if not isinstance(statement, str):
             continue
-        separator = "→" if "→" in statement else "->" if "->" in statement else None
+        separator = "\u2192" if "\u2192" in statement else "->" if "->" in statement else None
         if separator is None:
             invalid_paths.append(f"/risks/{idx}/risk_statement")
             continue
