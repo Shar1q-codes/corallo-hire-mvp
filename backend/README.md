@@ -45,6 +45,18 @@ This runs:
 - `backend/tests/kill_tests`
 - optional live drift guard when `LIVE_TESTS=true`
 
+## Go/No-Go Safety Gates
+Run private-beta readiness gates from repo root:
+
+```bash
+python backend/scripts/run_go_no_go.py
+```
+
+Live suites are enabled by flags:
+- `LIVE_DB_LEAKAGE_TESTS=true` for DB RLS leakage matrix.
+- `LIVE_API_TESTS=true` for API cross-tenant leakage tests.
+- `LIVE_STORAGE_TESTS=true` for storage isolation tests.
+
 ## Metrics
 - `/metrics` is disabled unless `METRICS_ENABLED=true`.
 - If `METRICS_ADMIN_SECRET` is set, requests must include `X-Admin-Metrics-Secret`.
