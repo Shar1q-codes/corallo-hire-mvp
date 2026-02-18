@@ -4,6 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.artifact import Artifact
+from app.validators.types import ArtifactType
 
 
 class ArtifactRepository:
@@ -16,3 +17,32 @@ class ArtifactRepository:
         )
         return list(result.scalars().all())
 
+    @staticmethod
+    async def create(
+        session: AsyncSession,
+        *,
+        tenant_id: UUID,
+        workspace_id: UUID,
+        job_id: UUID,
+        resume_id: UUID,
+        evaluation_id: UUID,
+        artifact_type: ArtifactType,
+        content_json: dict,
+        created_by: UUID,
+        schema_version: int = 1,
+    ) -> Artifact:
+        artifact = Artifact(
+            tenant_id=tenant_id,
+            workspace_id=workspace_id,
+            job_id=job_id,
+            resume_id=resume_id,
+            evaluation_id=evaluation_id,
+            artifact_type=artifact_type.value,
+            schema_version=schema_version,
+            content_json=content_json,
+            created_by=created_by,
+        )
+        session.add(artifact)
+        await session.commit()
+        await session.refresh(artifact)
+        return artifact

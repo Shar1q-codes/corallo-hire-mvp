@@ -22,6 +22,21 @@ class Settings(BaseSettings):
     jwt_audience: str = Field(default="", alias="JWT_AUDIENCE")
     jwt_issuer: str = Field(default="", alias="JWT_ISSUER")
 
+    llm_provider: str = Field(default="openai", alias="LLM_PROVIDER")
+    llm_model_intent: str = Field(default="", alias="LLM_MODEL_INTENT")
+    llm_model_risk: str = Field(default="", alias="LLM_MODEL_RISK")
+    llm_model_assumption: str = Field(default="", alias="LLM_MODEL_ASSUMPTION")
+    llm_model_interview: str = Field(default="", alias="LLM_MODEL_INTERVIEW")
+    llm_api_key: str = Field(default="", alias="LLM_API_KEY")
+    llm_base_url: str = Field(default="", alias="LLM_BASE_URL")
+    llm_timeout_seconds: float = Field(default=30.0, alias="LLM_TIMEOUT_SECONDS")
+
+    breaker_error_threshold: int = Field(default=5, alias="BREAKER_ERROR_THRESHOLD")
+    breaker_window_seconds: int = Field(default=60, alias="BREAKER_WINDOW_SECONDS")
+    breaker_cooldown_seconds: int = Field(default=120, alias="BREAKER_COOLDOWN_SECONDS")
+
+    run_rate_limit_per_minute: int = Field(default=30, alias="RUN_RATE_LIMIT_PER_MINUTE")
+
     @property
     def cors_origins(self) -> list[str]:
         if not self.app_cors_origins.strip():
@@ -32,4 +47,3 @@ class Settings(BaseSettings):
 @lru_cache
 def get_settings() -> Settings:
     return Settings()
-

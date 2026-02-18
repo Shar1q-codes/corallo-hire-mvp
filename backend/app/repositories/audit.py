@@ -30,3 +30,23 @@ class AuditRepository:
         await session.refresh(record)
         return record
 
+    @staticmethod
+    async def log_stage(
+        session: AsyncSession,
+        *,
+        tenant_id: UUID,
+        actor_user_id: UUID,
+        evaluation_id: UUID,
+        role: str,
+        action: str,
+        detail_json: dict,
+    ) -> AuditLog:
+        return await AuditRepository.create(
+            session,
+            tenant_id=tenant_id,
+            actor_user_id=actor_user_id,
+            entity_type="evaluation",
+            entity_id=evaluation_id,
+            action=action,
+            detail_json={"role": role, **detail_json},
+        )
